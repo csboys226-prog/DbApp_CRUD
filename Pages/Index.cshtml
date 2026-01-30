@@ -1,0 +1,62 @@
+﻿@page
+@model IndexModel
+@{ ViewData["Title"] = "Employee CRUD"; }
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Employee Management System</h2>
+
+    <div class="card p-4 mb-5 shadow-sm">
+        <h4>Add / Edit Employee</h4>
+        <form method="post" asp-page-handler="Save">
+            <input type="hidden" asp-for="EmpObj.Id" id="empId" />
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <input asp-for="EmpObj.Name" class="form-control" placeholder="Name" id="empName" required />
+                </div>
+                <div class="col-md-5">
+                    <input asp-for="EmpObj.Designation" class="form-control" placeholder="Designation" id="empDesig" required />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-hover border">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th><th>Name</th><th>Designation</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.EmployeeList)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Designation</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" 
+                                onclick="fillForm(@item.Id, '@item.Name', '@item.Designation')">Edit</button>
+                        
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline;">
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this record?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function fillForm(id, name, desig) {
+            document.getElementById('empId').value = id;
+            document.getElementById('empName').value = name;
+            document.getElementById('empDesig').value = desig;
+            window.scrollTo(0, 0); // Scroll to top to see the form
+        }
+    </script>
+}
